@@ -6,7 +6,7 @@
 /*   By: cviegas <cviegas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 19:25:58 by cviegas           #+#    #+#             */
-/*   Updated: 2023/12/07 09:06:34 by cviegas          ###   ########.fr       */
+/*   Updated: 2023/12/07 10:33:45 by cviegas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,50 +38,6 @@ void	free_splitter(char **s)
 	free(s);
 }
 
-// int	five_of_a_kind(char *s)
-// {
-// 	if (s[0] == s[1] && s[1] == s[2] && s[2] == s[3] && s[3] == s[4])
-// 		return (1);
-// 	return (0);
-// }
-
-// int	four_of_a_kind(char *s)
-// {
-// 	if (s[0] == s[1] && s[1] == s[2] && s[2] == s[3])
-// 		return (1);
-// 	if (s[0] == s[1] && s[1] == s[2] && s[2] == s[4])
-// 		return (1);
-// 	if (s[0] == s[1] && s[1] == s[3] && s[3] == s[4])
-// 		return (1);
-// 	if (s[0] == s[2] && s[2] == s[3] && s[3] == s[4])
-// 		return (1);
-// 	if (s[1] == s[2] && s[2] == s[3] && s[3] == s[4])
-// 		return (1);
-// 	return (0);
-// }
-
-// int	high_card(char *s)
-// {
-// 	int	i;
-// 	int	j;
-
-// 	i = 0;
-// 	while (i < 5)
-// 	{
-// 		j = 0;
-// 		while (j < 5)
-// 		{
-// 			if (i == j)
-// 				j++;
-// 			if (s[i] == s[j])
-// 				return (0);
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-// 	return (1);
-// }
-
 int	count_pair(char *s)
 {
 	int	i;
@@ -103,20 +59,46 @@ int	count_pair(char *s)
 		}
 		i++;
 	}
-	return (countpair / 2);
+	return (countpair);
 }
 int	pos_in_char(char s[], char c)
 {
 	int	i;
 
 	i = 0;
-	while (s[i])
+	while (i < 5)
 	{
 		if (s[i] == c)
 			return (i);
 		i++;
 	}
 	return (i);
+}
+int		card_cmp(char *card1, char *card2, char *cardset)
+{
+	int i = 0;
+
+	while (i < 5)
+	{
+		if (card1[i] == card2[i])
+			i++;
+		else if (ft_isdigit(card1[i]) && ft_isdigit(card2[i]) && (card1[i] - '0') < (card2[i] - '0'))
+			return (1);
+		else if (ft_isdigit(card1[i]) && ft_isdigit(card2[i]) && (card1[i] - '0') > (card2[i] - '0'))
+			return (0);
+		else if (ft_isalpha(card1[i]) && ft_isdigit(card2[i]))
+			return (0);
+		else if (ft_isdigit(card1[i]) && ft_isalpha(card2[i]))
+			return (1);
+		else if (ft_isalpha(card1[i]) && ft_isalpha(card2[i]))
+		{
+			if (pos_in_char(cardset, card1[i]) < pos_in_char(cardset, card2[i]))
+				return (1);
+			return (0);
+		}
+
+	}
+	return (1);
 }
 
 void	tri(char ***tab)
@@ -127,9 +109,11 @@ void	tri(char ***tab)
 	char	**temp;
 	char	*tab_i;
 	char	*tab_j;
-	char	cardset[13] = "23456789TJQKA";
 
 	i = 0;
+	k = 0;
+	// while(k < 1000)
+	// {
 	while (tab[i])
 	{
 		j = 0;
@@ -137,32 +121,22 @@ void	tri(char ***tab)
 		{
 			tab_i = tab[i][0];
 			tab_j = tab[j][0];
-			if (count_pair(tab[i][0]) < count_pair(tab[j][0]))
+			if (count_pair(tab[i][0]) < count_pair(tab[j][0]) 
+			|| (count_pair(tab[i][0]) == count_pair(tab[j][0])
+			   && card_cmp(tab[i][0], tab[j][0], "TJQKA")))
 			{
 				temp = tab[j];
 				tab[j] = tab[i];
 				tab[i] = temp;
 			}
-			if (count_pair(tab[i][0]) == count_pair(tab[j][0]))
-			{
-				k = 0;
-				while (k < 5)
-				{
-					if (pos_in_char(cardset,
-							tab[i][0][k]) < pos_in_char(cardset, tab[j][0][k]))
-					{
-						temp = tab[j];
-						tab[j] = tab[i];
-						tab[i] = temp;
-						break ;
-					}
-					k++;
-				}
-			}
 			j++;
 		}
 		i++;
 	}
+	// k++;
+	// }
+
+	
 }
 
 int	sum_tab(char ***tab)
@@ -217,7 +191,7 @@ int	main(int ac, char **av)
 		free_splitter(tab[j]);
 		j++;
 	}
-	//printf("%d", count_pair(av[1]));
+	printf("%d", count_pair(av[1]));
 	free(tab);
 	(void)ac;
 	(void)av;
