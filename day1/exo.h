@@ -6,13 +6,13 @@
 /*   By: cviegas <cviegas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 19:24:40 by cviegas           #+#    #+#             */
-/*   Updated: 2023/12/04 16:50:05 by cviegas          ###   ########.fr       */
+/*   Updated: 2023/12/07 06:27:07 by cviegas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXO_H
 # define EXO_H
-# include "../../libft/libft.h"
+# include "../quoicoulibft_dir.h"
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdio.h>
